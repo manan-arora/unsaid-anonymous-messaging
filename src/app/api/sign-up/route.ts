@@ -5,11 +5,14 @@ import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import { success } from "zod";
 
 export async function POST(request: Request) {
+  // Ensure MongoDB connection exists before any DB operation
   await dbConnect();
 
   try {
     const { username, email, password } = await request.json();
 
+    // Block signup if username is already claimed by a verified user.
+    // Unverified users don't permanently reserve usernames.
     const existingUserVerifiedByUsername = await UserModel.findOne({
       username,
       isVerified: true,
@@ -29,10 +32,12 @@ export async function POST(request: Request) {
 
     const existingUserByEmail = await UserModel.findOne({ email });
 
+    // Generate 6-digit OTP for email verification
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {
+        // Email already belongs to a verified account
         return Response.json(
           {
             success: false,
@@ -41,14 +46,22 @@ export async function POST(request: Request) {
           { status: 400 },
         );
       } else {
+        // User previously signed up but never verified.
+        // Allow re-registration by updating password + verification code.
         const hashedPassword = await bcrypt.hash(password, 10);
+
         existingUserByEmail.password = hashedPassword;
         existingUserByEmail.verifyCode = verifyCode;
+
+        // OTP expires in 1 hour
         existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
-        await existingUserByEmail.save(); 
+
+        await existingUserByEmail.save();
       }
     } else {
+      // Completely new user → create fresh document
       const hashedPassword = await bcrypt.hash(password, 10);
+
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);
 
@@ -66,8 +79,7 @@ export async function POST(request: Request) {
       await newUser.save();
     }
 
-    //send verification email
-
+    // Send verification email after DB changes are successful
     const emailResponse = await sendVerificationEmail(
       email,
       username,
@@ -93,6 +105,7 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.error("Error registering user", error);
+
     return Response.json(
       {
         success: false,
