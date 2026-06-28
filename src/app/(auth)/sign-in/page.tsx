@@ -1,6 +1,16 @@
-import React from 'react'
+"use client";
 
-function page() {
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import Link from "next/link";
+
+const page = () => {
+
+  const [username, setUsername] = useState('')
+
+  
+
   return (
     <div>page</div>
   )
