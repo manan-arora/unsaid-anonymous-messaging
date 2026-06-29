@@ -60,9 +60,13 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
   return (
     <Card size="sm" className="mx-auto w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Small Card</CardTitle>
+        <CardTitle>
+          <div className="flex justify-between">
+          {message.content}
+          
+           {/* AlertDialog is confirmation modal before destructive action */}
 
-        {/* AlertDialog is confirmation modal before destructive action */}
+           
         <AlertDialog>
 
           {/* asChild means Button becomes trigger instead of wrapper */}
@@ -96,17 +100,12 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        
+          </div>
+          </CardTitle>
 
-        <CardDescription>
-          This card uses the small size variant.
-        </CardDescription>
+       
       </CardHeader>
-
-      <CardFooter>
-        <Button variant="outline" size="sm" className="w-full">
-          Action
-        </Button>
-      </CardFooter>
     </Card>
   )
 }
