@@ -15,24 +15,17 @@ import { Controller } from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Ghost, Loader2, Sparkles } from "lucide-react";
 
-const page = () => {
-  // Separate username state only for debounced API checking.
-  // React Hook Form already stores username, but we don't want API calls on every keystroke.
+const SignUp = () => {
   const [username, setUsername] = useState("");
-
   const [usernameMessage, setUsernameMessage] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Wait 500ms after user stops typing before updating username state
   const debounced = useDebounceCallback(setUsername, 500);
-
   const router = useRouter();
 
-  // react-hook-form + zod integration:
-  // handle form state, validation, errors automatically
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -42,7 +35,6 @@ const page = () => {
     },
   });
 
-  // Whenever debounced username changes, check if username is unique
   useEffect(() => {
     const checkUsernameUnique = async () => {
       if (username) {
@@ -68,8 +60,6 @@ const page = () => {
     checkUsernameUnique();
   }, [username]);
 
-  // Called only after form validation passes.
-  // `data` is automatically provided by react-hook-form.
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true);
 
@@ -85,7 +75,7 @@ const page = () => {
       console.error("Error in signup of user", error);
 
       const axiosError = error as AxiosError<ApiResponse>;
-      let errorMessage = axiosError.response?.data.message;
+      const errorMessage = axiosError.response?.data.message;
 
       toast.error("Signup failed", {
         description: errorMessage,
@@ -95,124 +85,161 @@ const page = () => {
     }
   };
 
+  const usernameTone =
+    usernameMessage === "Username is unique"
+      ? "text-[#5f7b00]"
+      : "text-[#c2584e]";
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <h1 className="text-2xl font-extrabold tracking-tight lg:text-4xl mb-6">
-            Join Unsaid
-          </h1>
-          <p className="mb-4">Sign up to continue your secret conversations</p>
-        </div>
+    <div className="flex min-h-screen items-center py-8 sm:py-12">
+      <div className="page-shell">
+        <div className="neo-panel overflow-hidden">
+          <div className="grid lg:grid-cols-[0.88fr_1.12fr]">
+            <div className="border-b-[2.5px] border-[#26222c] bg-[#eefb95] px-6 py-8 sm:px-8 sm:py-10 lg:border-b-0 lg:border-r">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#201a28] transition hover:translate-x-0.5"
+              >
+                <ArrowLeft className="size-4" />
+                Back to home
+              </Link>
 
-        {/* handleSubmit:
-            1. Collects form data
-            2. Runs Zod validation
-            3. Calls onSubmit(data) if valid */}
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <Controller
-            name="username"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Username</FieldLabel>
+              <div className="mt-10 max-w-sm">
+                <div className="flex items-center gap-3">
+                  <span className="ghost-mark bg-[#b687ff]">
+                    <Ghost className="size-5" />
+                  </span>
+                  <p className="text-3xl font-black tracking-[-0.06em] lowercase text-[#201a28]">
+                    unsaid
+                  </p>
+                </div>
 
-                <Input
-                  placeholder="username"
-                  {...field}
-                  onChange={(e) => {
-                    // Update RHF internal form state
-                    field.onChange(e);
-
-                    // Trigger debounced username availability check
-                    debounced(e.target.value);
-                  }}
-                  aria-invalid={fieldState.invalid}
-                />
-
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-
-                {isCheckingUsername && <Loader2 className="animate-spin" />}
-
-                <p
-                  className={`text-sm ${
-                    usernameMessage === "Username is unique"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {usernameMessage}
+                <h1 className="mt-10 text-5xl font-black leading-[0.95] tracking-[-0.08em] text-[#201a28] sm:text-6xl">
+                  start your
+                  <br />
+                  link story
+                </h1>
+                <p className="mt-5 text-lg leading-8 text-[#3d3649]">
+                  Create your account, claim your space, and let people send messages that feel honest.
                 </p>
-              </Field>
-            )}
-          />
 
-          <Controller
-            name="email"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Email</FieldLabel>
+                <div className="mt-10 flex items-end justify-between gap-6">
+                  <div className="neo-card rotate-[-3deg] bg-white px-4 py-3">
+                    <p className="text-sm font-semibold text-[#201a28]">Playful branding.</p>
+                    <p className="text-sm font-semibold text-[#201a28]">Quietly expressive.</p>
+                  </div>
+                  <Sparkles className="size-8 text-[#201a28]" />
+                </div>
+              </div>
+            </div>
 
-                <Input
-                  placeholder="email"
-                  {...field}
-                  aria-invalid={fieldState.invalid}
-                />
+            <div className="bg-[#fffdf8] px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
+              <div className="mx-auto w-full max-w-md">
+                <p className="section-kicker">sign up</p>
+                <h2 className="mt-3 text-4xl font-black tracking-[-0.06em] text-[#201a28]">
+                  Create your Unsaid account
+                </h2>
+                <p className="mt-4 text-base leading-7 text-[#5f566e]">
+                  Reserve a username and start collecting anonymous messages your way.
+                </p>
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
+                <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-6">
+                  <Controller
+                    name="username"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel className="text-sm font-semibold text-[#201a28]">Username</FieldLabel>
+                        <Input
+                          placeholder="username"
+                          className="neo-input"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            debounced(e.target.value);
+                          }}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
 
-          <Controller
-            name="password"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Password</FieldLabel>
+                        <div className="flex min-h-6 items-center gap-2">
+                          {isCheckingUsername && <Loader2 className="size-4 animate-spin text-[#8f63ef]" />}
+                          {usernameMessage && (
+                            <p className={`text-sm font-medium ${usernameTone}`}>
+                              {usernameMessage}
+                            </p>
+                          )}
+                        </div>
+                      </Field>
+                    )}
+                  />
 
-                <Input
-                  type="password"
-                  placeholder="password"
-                  {...field}
-                  aria-invalid={fieldState.invalid}
-                />
+                  <Controller
+                    name="email"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel className="text-sm font-semibold text-[#201a28]">Email</FieldLabel>
+                        <Input
+                          placeholder="email"
+                          className="neo-input"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
+                  <Controller
+                    name="password"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel className="text-sm font-semibold text-[#201a28]">Password</FieldLabel>
+                        <Input
+                          type="password"
+                          placeholder="password"
+                          className="neo-input"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
 
-          <Button className="w-full" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please Wait
-              </>
-            ) : (
-              "Signup"
-            )}
-          </Button>
-        </form>
+                  <Button className="neo-button h-12 w-full border-[#26222c] text-base font-bold text-[#201a28] hover:bg-[#a977ff]" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Please wait
+                      </>
+                    ) : (
+                      "Sign up"
+                    )}
+                  </Button>
+                </form>
 
-        <div className="text-center mt-4">
-          <p>
-            Already a member?{" "}
-            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
-              Sign in
-            </Link>
-          </p>
+                <div className="mt-6 text-sm font-medium text-[#5f566e]">
+                  Already a member?{" "}
+                  <Link href="/sign-in" className="font-bold text-[#8f63ef] transition hover:text-[#7046d9]">
+                    Sign in
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default page;
+export default SignUp;

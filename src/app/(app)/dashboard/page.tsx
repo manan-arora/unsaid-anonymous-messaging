@@ -34,7 +34,6 @@ const Page = () => {
   });
 
   const { register, watch, setValue } = form;
-
   const acceptMessage = watch("acceptMessages");
 
   const fetchAcceptMessage = useCallback(async () => {
@@ -116,46 +115,52 @@ const Page = () => {
   }
 
   return (
-    <div className="page-shell my-8 sm:my-10">
-      <div className="panel-glass overflow-hidden p-6 sm:p-8">
-        <div className="flex flex-col gap-4 border-b border-white/8 pb-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-white/35">Dashboard</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Welcome back, {session.user.username || session.user.email}
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/55 sm:text-base">
-              Share your link, decide when you want to receive messages, and keep your inbox focused.
-            </p>
-          </div>
+    <div className="page-shell my-6 pb-10 sm:my-8 sm:pb-14">
+      <div className="neo-panel overflow-hidden">
+        <div className="border-b-[2.5px] border-[#26222c] px-6 py-7 sm:px-8 lg:px-10">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="section-kicker">dashboard</p>
+              <h1 className="mt-3 text-4xl font-black tracking-[-0.07em] text-[#201a28] sm:text-5xl">
+                hey, {session.user.username || session.user.email}
+              </h1>
+              <p className="mt-3 max-w-2xl text-base leading-7 text-[#5f566e]">
+                Here&apos;s what&apos;s happening with your link today.
+              </p>
+            </div>
 
-          <Button
-            variant="outline"
-            className="border-white/12 bg-white/5 text-white hover:bg-white/10"
-            onClick={(e) => {
-              e.preventDefault();
-              fetchMessages(true);
-            }}
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCcw className="h-4 w-4" />
-            )}
-            Refresh inbox
-          </Button>
+            <Button
+              className="neo-button-secondary h-12 border-[#26222c] px-5 text-[#201a28] hover:bg-[#fff1bd]"
+              onClick={(e) => {
+                e.preventDefault();
+                fetchMessages(true);
+              }}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCcw className="h-4 w-4" />
+              )}
+              Refresh inbox
+            </Button>
+          </div>
         </div>
 
-        <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(260px,0.7fr)]">
-          <section className="panel-muted p-5 sm:p-6">
+        <div className="grid gap-4 px-6 py-6 sm:px-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)] lg:px-10">
+          <section className="neo-card bg-white p-5 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-white">Your public link</h2>
-                <p className="mt-2 text-sm text-white/55">
-                  Share it anywhere people should be able to send you anonymous thoughts.
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8a8099]">
+                  Your link
+                </p>
+                <h2 className="mt-2 text-2xl font-black tracking-[-0.05em] text-[#201a28]">
+                  Share your inbox
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-[#5f566e]">
+                  One link is all it takes for people to send anonymous messages.
                 </p>
               </div>
-              <Button onClick={copyToClipboard} className="sm:min-w-[132px]">
+              <Button className="neo-button h-11 border-[#26222c] px-5 text-[#201a28] hover:bg-[#a977ff]" onClick={copyToClipboard}>
                 <Copy className="size-4" />
                 Copy link
               </Button>
@@ -166,61 +171,72 @@ const Page = () => {
                 type="text"
                 value={profileUrl}
                 readOnly
-                className="h-12 rounded-2xl border-white/10 bg-black/20 px-4 text-white placeholder:text-white/30"
+                className="neo-input bg-[#fffdf8] font-medium"
               />
             </div>
           </section>
 
-          <section className="panel-muted flex flex-col justify-between p-5 sm:p-6">
-            <div>
-              <h2 className="text-lg font-semibold text-white">Inbox controls</h2>
-              <p className="mt-2 text-sm text-white/55">
-                Pause incoming messages anytime without affecting your existing inbox.
-              </p>
-            </div>
-
-            <div className="mt-8 flex items-center justify-between gap-4 rounded-2xl border border-white/8 bg-black/20 p-4">
+          <section className="neo-card bg-[#fff3ba] p-5 sm:p-6">
+            <div className="flex h-full flex-col justify-between gap-6">
               <div>
-                <p className="text-sm font-medium text-white">Accept messages</p>
-                <p className="mt-1 text-sm text-white/45">
-                  {acceptMessage ? "Incoming messages are enabled." : "Incoming messages are paused."}
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7d6d35]">
+                  Accepting messages
+                </p>
+                <p className="mt-3 text-4xl font-black tracking-[-0.07em] text-[#201a28]">
+                  {acceptMessage ? "On" : "Off"}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#5f566e]">
+                  Pause incoming messages anytime without affecting your existing inbox.
                 </p>
               </div>
-              <Switch
-                {...register("acceptMessages")}
-                checked={acceptMessage}
-                onCheckedChange={handleSwitchChange}
-                disabled={isSwitchLoading}
-              />
+
+              <div className="flex items-center justify-between rounded-[1.4rem] border-[2.5px] border-[#26222c] bg-white px-4 py-4 shadow-[0_5px_0_0_rgba(38,34,44,0.14)]">
+                <div>
+                  <p className="text-sm font-semibold text-[#201a28]">Inbox toggle</p>
+                  <p className="text-sm text-[#6f667e]">
+                    {acceptMessage ? "Receiving messages" : "Messages paused"}
+                  </p>
+                </div>
+                <Switch
+                  {...register("acceptMessages")}
+                  checked={acceptMessage}
+                  onCheckedChange={handleSwitchChange}
+                  disabled={isSwitchLoading}
+                />
+              </div>
             </div>
           </section>
         </div>
 
-        <Separator className="my-6 bg-white/8" />
+        <Separator className="bg-[#26222c]" />
 
-        <div className="mb-4">
-          <h2 className="text-2xl font-semibold tracking-tight text-white">Recent messages</h2>
-          <p className="mt-2 text-sm text-white/50">
-            {messages.length > 0
-              ? `${messages.length} message${messages.length === 1 ? "" : "s"} in your inbox.`
-              : "Your inbox is empty right now."}
-          </p>
-        </div>
+        <div className="px-6 py-6 sm:px-8 lg:px-10">
+          <div className="mb-5">
+            <h2 className="text-3xl font-black tracking-[-0.06em] text-[#201a28]">
+              Recent messages
+            </h2>
+            <p className="mt-2 text-sm font-medium text-[#6f667e]">
+              {messages.length > 0
+                ? `${messages.length} message${messages.length === 1 ? "" : "s"} in your inbox.`
+                : "Your inbox is empty right now."}
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 gap-4">
-          {messages.length > 0 ? (
-            messages.map((message) => (
-              <MessageCard
-                key={message._id.toString()}
-                message={message}
-                onMessageDelete={handleDeleteMessage}
-              />
-            ))
-          ) : (
-            <div className="panel-muted px-5 py-10 text-center text-sm text-white/48">
-              No messages to display yet.
-            </div>
-          )}
+          <div className="grid grid-cols-1 gap-4">
+            {messages.length > 0 ? (
+              messages.map((message) => (
+                <MessageCard
+                  key={message._id.toString()}
+                  message={message}
+                  onMessageDelete={handleDeleteMessage}
+                />
+              ))
+            ) : (
+              <div className="neo-card bg-[#eefb95] px-5 py-10 text-center text-sm font-medium text-[#4d4659]">
+                No messages to display yet.
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

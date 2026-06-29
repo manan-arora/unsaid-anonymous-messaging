@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight, CirclePlay, Ghost, Heart, Smile } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Autoplay from 'embla-carousel-autoplay';
 import messages from '@/messages.json';
@@ -16,111 +16,134 @@ import {
 export default function Home() {
   return (
     <>
-      <main className="flex-grow py-12 sm:py-16">
+      <main className="flex-grow pb-10 pt-6 sm:pb-14 sm:pt-8">
         <div className="page-shell">
-          <section className="panel-glass panel-grid overflow-hidden px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)] lg:items-center">
+          <section className="neo-panel overflow-hidden">
+            <div className="grid gap-10 px-6 py-8 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:px-10">
               <div className="max-w-2xl">
-                <p className="mb-5 text-xs uppercase tracking-[0.28em] text-violet-200/70">
-                  Speak without the social tax
-                </p>
-                <h1 className="section-title text-4xl sm:text-5xl lg:text-6xl">
-                  A calmer place for
-                  <span className="violet-text"> unsaid </span>
-                  thoughts.
+                <p className="section-kicker">your link, your vibe</p>
+                <h1 className="mt-5 text-5xl font-black leading-[0.95] tracking-[-0.08em] text-[#201a28] sm:text-6xl lg:text-7xl">
+                  your space for
+                  <span className="hero-word"> unsaid </span>
+                  things
                 </h1>
-                <p className="section-copy mt-6 max-w-xl text-base sm:text-lg">
-                  Share honestly, receive openly, and let the conversation stay focused on what matters instead of who said it first.
+                <p className="mt-6 max-w-xl text-lg leading-8 text-[#5f566e]">
+                  Share your link. People send anonymous messages. You read them in a space that feels expressive, personal, and yours.
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link href="/sign-up">
-                    <Button size="lg" className="w-full sm:w-auto">
+                    <Button className="neo-button h-[52px] w-full border-[#26222c] px-6 text-base font-bold text-[#201a28] hover:bg-[#a977ff] sm:w-auto">
                       Create your link
                       <ArrowRight className="size-4" />
                     </Button>
                   </Link>
                   <Link href="/sign-in">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="w-full border-white/12 bg-white/5 text-white hover:bg-white/10 sm:w-auto"
-                    >
-                      Open dashboard
+                    <Button className="neo-button-secondary h-[52px] w-full border-[#26222c] px-6 text-base font-bold text-[#201a28] hover:bg-[#fff1bd] sm:w-auto">
+                      See how it works
+                      <CirclePlay className="size-4" />
                     </Button>
                   </Link>
                 </div>
 
-                <div className="mt-10 grid gap-4 sm:grid-cols-3">
-                  <div className="panel-muted p-4">
-                    <p className="text-sm font-medium text-white">Anonymous by design</p>
-                    <p className="mt-2 text-sm text-white/55">No public replies, no performative threads.</p>
+                <div className="mt-10 flex flex-wrap items-center gap-4 text-sm font-semibold text-[#201a28]">
+                  <div className="flex -space-x-3">
+                    {["#c4a1ff", "#eefb95", "#ffd9d8", "#d6c8ff"].map((color, index) => (
+                      <span
+                        key={index}
+                        className="flex size-12 items-center justify-center rounded-full border-[2.5px] border-[#26222c] text-[#201a28]"
+                        style={{ backgroundColor: color }}
+                      >
+                        <Ghost className="size-5" />
+                      </span>
+                    ))}
                   </div>
-                  <div className="panel-muted p-4">
-                    <p className="text-sm font-medium text-white">Built for sharing</p>
-                    <p className="mt-2 text-sm text-white/55">A link-first flow that is easy to send anywhere.</p>
-                  </div>
-                  <div className="panel-muted p-4">
-                    <p className="text-sm font-medium text-white">Private feeling</p>
-                    <p className="mt-2 text-sm text-white/55">Quiet contrast, generous spacing, and no visual noise.</p>
-                  </div>
+                  <p>
+                    Loved by <span className="text-[#8f63ef]">10K+</span> people
+                  </p>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="panel-muted p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-white">Inbox preview</p>
-                      <p className="mt-1 text-sm text-white/48">A small look at how messages land inside Unsaid.</p>
+              <div className="space-y-5">
+                <div className="neo-card min-h-[420px] bg-[#b687ff] px-5 py-5">
+                  <div className="flex h-full flex-col justify-between gap-5">
+                    <div className="flex justify-between text-[#201a28]">
+                      <span className="text-4xl font-black">*</span>
+                      <span className="soft-note flex size-16 items-center justify-center rounded-full border-[#26222c] bg-[#eefb95] shadow-[0_5px_0_0_rgba(38,34,44,0.18)]">
+                        <Smile className="size-8" />
+                      </span>
                     </div>
-                    <Sparkles className="mt-1 size-4 text-violet-300" />
+
+                    <Carousel plugins={[Autoplay({ delay: 2600 })]} className="w-full">
+                      <CarouselContent>
+                        {messages.map((message, index) => (
+                          <CarouselItem key={index}>
+                            <Card className="neo-card rotate-[-2deg] bg-[#fffdf8]">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center gap-3">
+                                  <span className="flex size-11 items-center justify-center rounded-[1rem] border-[2.5px] border-[#26222c] bg-[#eefb95] text-[#201a28] shadow-[0_4px_0_0_rgba(38,34,44,0.12)]">
+                                    <Heart className="size-4 fill-current" />
+                                  </span>
+                                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8a8099]">
+                                    {message.title}
+                                  </p>
+                                </div>
+                                <CardTitle className="pt-2 text-xl font-black tracking-[-0.04em] text-[#201a28]">
+                                  messages that feel personal, not performative
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-base leading-7 text-[#3d3649]">
+                                  {message.content}
+                                </p>
+                                <p className="mt-4 text-sm font-medium text-[#6f667e]">
+                                  {message.received}
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                    </Carousel>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <Carousel
-                  plugins={[Autoplay({ delay: 2600 })]}
-                  className="w-full"
-                >
-                  <CarouselContent>
-                    {messages.map((message, index) => (
-                      <CarouselItem key={index}>
-                        <Card className="panel-glass min-h-[240px] border-white/10 bg-white/[0.04]">
-                          <CardHeader className="space-y-3">
-                            <p className="text-xs uppercase tracking-[0.22em] text-white/35">
-                              {message.title}
-                            </p>
-                            <CardTitle className="text-xl text-white">
-                              Anonymous, without feeling disposable.
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-5">
-                            <div className="rounded-2xl border border-white/8 bg-black/20 p-4">
-                              <div className="flex items-start gap-3">
-                                <Mail className="mt-0.5 size-4 text-violet-300" />
-                                <div>
-                                  <p className="text-sm leading-6 text-white/80">{message.content}</p>
-                                  <p className="mt-3 text-xs text-white/40">{message.received}</p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-3 text-sm text-white/48">
-                              <Lock className="size-4" />
-                              <span>Messages stay one-way and identity stays out of the room.</span>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                </Carousel>
+            <div className="grid gap-0 border-t-[2.5px] border-[#26222c] bg-[#eefb95] sm:grid-cols-3">
+              <div className="flex items-start gap-4 px-6 py-5 sm:px-8">
+                <span className="ghost-mark size-11 bg-white shadow-[0_4px_0_0_rgba(38,34,44,0.14)]">
+                  <Ghost className="size-5" />
+                </span>
+                <div>
+                  <p className="text-lg font-black tracking-[-0.04em] text-[#201a28]">100% anonymous</p>
+                  <p className="mt-1 text-sm leading-6 text-[#4d4659]">No names. No handles. Just honest messages.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4 border-t-[2.5px] border-[#26222c] px-6 py-5 sm:border-l sm:border-t-0 sm:px-8">
+                <span className="ghost-mark size-11 bg-[#fff3ba] shadow-[0_4px_0_0_rgba(38,34,44,0.14)]">
+                  <ArrowRight className="size-5" />
+                </span>
+                <div>
+                  <p className="text-lg font-black tracking-[-0.04em] text-[#201a28]">Easy to share</p>
+                  <p className="mt-1 text-sm leading-6 text-[#4d4659]">One link is all it takes. Share anywhere.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4 border-t-[2.5px] border-[#26222c] px-6 py-5 sm:border-l sm:border-t-0 sm:px-8">
+                <span className="ghost-mark size-11 bg-[#ffd9d8] shadow-[0_4px_0_0_rgba(38,34,44,0.14)]">
+                  <Smile className="size-5" />
+                </span>
+                <div>
+                  <p className="text-lg font-black tracking-[-0.04em] text-[#201a28]">Made for you</p>
+                  <p className="mt-1 text-sm leading-6 text-[#4d4659]">Read, pause, and manage your inbox your way.</p>
+                </div>
               </div>
             </div>
           </section>
         </div>
       </main>
 
-      <footer className="border-t border-white/8 py-6 text-center text-sm text-white/45">
+      <footer className="px-4 pb-8 text-center text-sm font-medium text-[#6f667e]">
         © 2026 Unsaid. All rights reserved.
       </footer>
     </>
