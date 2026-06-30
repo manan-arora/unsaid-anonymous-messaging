@@ -328,7 +328,7 @@ This project helped deepen understanding of:
 **Manan Arora**
 
 - GitHub: https://github.com/manan-arora
-- LinkedIn: _Add LinkedIn here_
+- LinkedIn: https://www.linkedin.com/in/manan-arora-aa1009235
 
 ---
 
