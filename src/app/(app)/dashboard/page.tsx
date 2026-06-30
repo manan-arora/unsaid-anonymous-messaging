@@ -111,8 +111,19 @@ const Page = () => {
   };
 
   if (!session || !session.user) {
-    return <div>Please Login</div>;
-  }
+  return (
+    <div className="page-shell flex min-h-[80vh] items-center justify-center px-4">
+      <div className="neo-card doodle-corner w-full max-w-md bg-[#fef08a] p-8 text-center">
+        <h1 className="text-3xl font-black tracking-[-0.08em] text-[#140f1c]">
+          Please Login
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-[#4f475d]">
+          You need to sign in to access your dashboard and view messages.
+        </p>
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="page-shell my-6 pb-10 sm:my-8 sm:pb-14">

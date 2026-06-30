@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { verifySchema } from "@/schemas/verifySchema";
 import { ApiResponse } from "@/types/ApiResponse";
@@ -23,8 +23,8 @@ const VerifyAccount = () => {
   const form = useForm({
     resolver: zodResolver(verifySchema),
     defaultValues: {
-    code: "",
-  },
+      code: "",
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
@@ -52,45 +52,68 @@ const VerifyAccount = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <h1 className="text-2xl font-extrabold tracking-tight lg:text-4xl mb-6">
-            Verify Your Account
+    <div className="page-shell flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
+      <div className="neo-panel w-full max-w-xl overflow-hidden">
+        <div className="dashboard-tint doodle-corner border-b-[2.5px] border-[#26222c] px-6 py-7 sm:px-8">
+          <p className="section-label">account verification</p>
+
+          <h1 className="mt-3 text-3xl font-black tracking-[-0.08em] text-[#140f1c] sm:text-5xl">
+            Verify your account
           </h1>
-          <p className="mb-4">Enter the verification code sent to your email</p>
+
+          <p className="mt-3 max-w-md text-sm leading-6 text-[#4f475d] sm:text-base">
+            Enter the 6-digit verification code sent to your email.
+          </p>
         </div>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <Controller
-            name="code"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Verification Code</FieldLabel>
+        <div className="px-5 py-6 sm:px-8 sm:py-8">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="neo-card doodle-corner space-y-6 bg-[#ede9fe] p-5 sm:p-6"
+          >
+            <Controller
+              name="code"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel className="text-sm font-bold uppercase tracking-wide text-[#201a28]">
+                    Verification Code
+                  </FieldLabel>
 
-                <Input
-                  placeholder="6 digit code"
-                  {...field}
-                  
-                  aria-invalid={fieldState.invalid}
-                />
+                  <Input
+                    placeholder="123456"
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                    className="neo-input bg-white text-center text-xl font-black tracking-[0.4em]"
+                    maxLength={6}
+                    inputMode="numeric"
+                    onChange={(e) =>
+                      field.onChange(e.target.value.replace(/\D/g, ""))
+                    }
+                  />
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
 
-            
-              </Field>
-            )}
-          />
-
-
-          <Button className="w-full" type="submit" >
-           Submit
-          </Button>
-        </form>
-
+            <Button
+              type="submit"
+              className="neo-button h-12 w-full border-[#26222c] bg-[#a78bfa] text-base font-bold text-[#201a28] hover:bg-[#8b6ef7]"
+            >
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                "Verify Account"
+              )}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );
