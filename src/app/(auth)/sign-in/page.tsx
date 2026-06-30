@@ -55,7 +55,7 @@ const SignIn = () => {
       <div className="page-shell">
         <div className="neo-panel overflow-hidden">
           <div className="grid lg:grid-cols-[0.88fr_1.12fr]">
-            <div className="border-b-[2.5px] border-[#26222c] bg-[#b687ff] px-6 py-8 sm:px-8 sm:py-10 lg:border-b-0 lg:border-r">
+            <div className="hidden border-b-[2.5px] border-[#26222c] bg-[#b687ff] px-6 py-8 sm:px-8 sm:py-10 lg:block lg:border-b-0 lg:border-r">
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-[#201a28] transition hover:translate-x-0.5"
@@ -93,10 +93,17 @@ const SignIn = () => {
               </div>
             </div>
 
-            <div className="bg-[#fffdf8] px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
+            <div className="bg-[#fffdf8] px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10 lg:px-10">
               <div className="mx-auto w-full max-w-md">
+                <Link
+                  href="/"
+                  className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[#201a28] transition hover:translate-x-0.5 lg:hidden"
+                >
+                  <ArrowLeft className="size-4" />
+                  Back to home
+                </Link>
                 <p className="section-kicker">sign in</p>
-                <h2 className="mt-3 text-4xl font-black tracking-[-0.06em] text-[#201a28]">
+                <h2 className="mt-3 text-3xl font-black tracking-[-0.06em] text-[#201a28] sm:text-4xl">
                   Continue your conversations
                 </h2>
                 <p className="mt-4 text-base leading-7 text-[#5f566e]">
@@ -143,7 +150,7 @@ const SignIn = () => {
                     )}
                   />
 
-                  <Button className="neo-button h-12 w-full border-[#26222c] text-base font-bold text-[#201a28] hover:bg-[#a977ff]" type="submit" disabled={isSubmitting}>
+                  <Button className="neo-button h-11 w-full border-[#26222c] text-sm font-bold text-[#201a28] hover:bg-[#a977ff] sm:h-12 sm:text-base" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Ellipsis, Heart, MessageCircleHeart, Smile, X } from "lucide-react"
+import { Ellipsis, Heart, MessageCircleHeart, Smile, Sparkles, X } from "lucide-react"
 import { Message } from "@/model/User"
 import axios from "axios"
 import { ApiResponse } from "@/types/ApiResponse"
@@ -29,17 +29,28 @@ type MessageCardProps = {
 
 const iconSets = [
   {
-    wrapper: "bg-[#c4a1ff]",
+    wrapper: "bg-[#a78bfa]",
     icon: <Heart className="size-4 fill-current" />,
   },
   {
-    wrapper: "bg-[#eefb95]",
+    wrapper: "bg-[#d9f99d]",
     icon: <Smile className="size-4" />,
   },
   {
-    wrapper: "bg-[#ffdf93]",
+    wrapper: "bg-[#fed7aa]",
     icon: <MessageCircleHeart className="size-4" />,
   },
+  {
+    wrapper: "bg-[#bae6fd]",
+    icon: <Sparkles className="size-4" />,
+  },
+]
+
+const cardBackgrounds = [
+  "bg-[#faf8f3]",
+  "bg-[#ede9fe]",
+  "bg-[#fed7aa]/55",
+  "bg-[#bae6fd]/55",
 ]
 
 export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
@@ -51,6 +62,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
   })
 
   const accent = iconSets[message.content.length % iconSets.length]
+  const cardTone = cardBackgrounds[message.content.length % cardBackgrounds.length]
 
   const handleDeleteConfirm = async () => {
     try {
@@ -66,18 +78,18 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
   }
 
   return (
-    <Card size="sm" className="neo-card mx-auto w-full max-w-none bg-white">
+    <Card size="sm" className={`neo-card mx-auto w-full max-w-none ${cardTone}`}>
       <CardHeader className="gap-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <span className={`flex size-12 shrink-0 items-center justify-center rounded-[1rem] border-[2.5px] border-[#26222c] text-[#201a28] shadow-[0_4px_0_0_rgba(38,34,44,0.12)] ${accent.wrapper}`}>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <span className={`flex size-10 shrink-0 items-center justify-center rounded-[1rem] border-[2.5px] border-[#26222c] text-[#201a28] shadow-[0_4px_0_0_rgba(38,34,44,0.12)] sm:size-12 ${accent.wrapper}`}>
               {accent.icon}
             </span>
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8a8099]">
+            <div className="min-w-0 space-y-2">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#8b5cf6]">
                 Anonymous message
               </p>
-              <CardTitle className="max-w-2xl text-base leading-7 text-[#201a28] sm:text-lg">
+              <CardTitle className="max-w-2xl break-words text-base font-black leading-7 tracking-[-0.03em] text-[#201a28] sm:text-xl">
                 {message.content}
               </CardTitle>
               <CardDescription className="text-xs font-medium text-[#6f667e]">
@@ -86,7 +98,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2 sm:self-start">
             <span className="hidden text-[#201a28] md:block">
               <Ellipsis className="size-5" />
             </span>
@@ -95,7 +107,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  className="neo-button-secondary size-10 border-[#26222c] bg-[#ffe0df] text-[#201a28] hover:bg-[#ffd1cf]"
+                  className="neo-button-secondary size-9 border-[#26222c] bg-[#fef08a] text-[#201a28] hover:bg-[#fde047] sm:size-10"
                 >
                   <X className="size-4" />
                 </Button>

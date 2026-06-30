@@ -1,14 +1,52 @@
-import { google } from '@ai-sdk/google';
-import { streamText } from 'ai';
-import { NextResponse } from 'next/server';
+import { google } from "@ai-sdk/google";
+import { streamText } from "ai";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const prompt =
-      "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
+    const prompt = `Generate exactly 3 short anonymous message suggestions for a social anonymous messaging platform.
+
+Return the output as a SINGLE string, with each message separated by "||".
+
+IMPORTANT:
+The 3 suggestions should be a mix of the following styles (not all questions):
+
+* Open-ended friendly questions
+* Genuine compliments
+* Fun / playful notes
+* Light-hearted conversation starters
+* Thoughtful observations
+
+Tone requirements:
+
+* warm
+* friendly
+* slightly witty
+* youthful and conversational
+* natural, like something a real person would send anonymously
+
+Avoid:
+
+* overly formal wording
+* robotic AI phrasing
+* personal/sensitive topics
+* creepy, romantic, or inappropriate messages
+* generic boring prompts
+
+Good examples of style:
+
+* What’s something you’re proud of lately?
+* You have a really calming vibe, has anyone told you that?
+* Okay be honest — what’s your most controversial food opinion?
+* You seem like someone people trust easily.
+* I feel like you’d either be really fun or really chaotic in a group trip.
+
+Output format example:
+What’s something you’re proud of lately?||You have a really calming vibe, has anyone told you that?||Okay be honest — what’s your most controversial food opinion?
+`;
 
     const result = streamText({
-      model: google('gemini-2.5-flash'),
+      model: google("gemini-2.5-flash"),
       prompt,
     });
 
@@ -16,12 +54,12 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("AI route error:", error);
 
-  return NextResponse.json(
-    {
-      success: false,
-      message: "Failed to generate response"
-    },
-    { status: 500 }
-  );
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to generate response",
+      },
+      { status: 500 },
+    );
   }
 }
