@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner"
+import { Analytics } from "@vercel/analytics/next"
 import Navbar from "@/components/Navbar";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
